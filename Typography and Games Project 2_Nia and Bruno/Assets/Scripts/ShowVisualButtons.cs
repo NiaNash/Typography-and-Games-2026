@@ -6,12 +6,15 @@ public class ShowVisualButtons : MonoBehaviour
 {
     [SerializeField] private GameObject buttonToShow;
     [SerializeField] private GameObject buttonToHide;
+    [SerializeField] private GameObject dialogueHide;
     
 
-    public void ShowTheButton()
+    public void ShowTheButton() //when the button is pressed
     {
-        buttonToShow.SetActive(true);
+        buttonToShow.SetActive(true); //show this Visual Inspection Canvas
 
-        buttonToHide.SetActive(false);
+        buttonToHide.SetActive(false); //hide starting Canvas
+
+        dialogueHide.SetActive(false);//hide this Starting Dialogue Box
     }
 }
