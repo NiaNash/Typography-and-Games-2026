@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-using UnityEngine.UI; // Needed for Image
+using UnityEngine.UI;
 
 public class PopupWindow : MonoBehaviour
 {
     [Header("Image")]
-    [SerializeField] private Image displayImage; // <-- This MUST exist
+    [SerializeField] private Image displayImage;
 
     [Header("Auto Close Settings")]
     [SerializeField] private float autoCloseTime = 5f;
+
+    [Header("Other Screens")]
+    [SerializeField] private GameObject visualInspectionScreen; // drag your inactive canvas here
 
     private float timer;
 
@@ -31,10 +33,11 @@ public class PopupWindow : MonoBehaviour
 
     public void ClosePopup()
     {
-        gameObject.SetActive(false);
+        gameObject.SetActive(false);                       // hide popup
+        visualInspectionScreen.SetActive(true);            // show inspection screen
     }
 
-    // This is how you change the image
+    // Optional: change the popup image
     public void SetImage(Sprite newSprite)
     {
         displayImage.sprite = newSprite;
