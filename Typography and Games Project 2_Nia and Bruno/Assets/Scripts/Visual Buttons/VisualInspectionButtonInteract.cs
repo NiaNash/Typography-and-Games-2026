@@ -9,6 +9,8 @@ public class VisualInspectionButtonInteract : MonoBehaviour
     public Button[] inspectionButtons;
     private bool[] hasBeenPressed;
 
+    [SerializeField] private GameObject energy1; //ref energy
+
     void Start()
     {
         hasBeenPressed = new bool[inspectionButtons.Length];
@@ -26,6 +28,8 @@ public class VisualInspectionButtonInteract : MonoBehaviour
             hasBeenPressed[index] = true;
             inspectionButtons[index].interactable = false;
             Debug.Log($"Button {index} pressed!");
+
+            energy1.SetActive( false ); //make energy 1 disappear
         }
     }
 }
