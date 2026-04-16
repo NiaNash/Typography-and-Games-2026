@@ -29,7 +29,7 @@ public class VisualInspectionButtonInteract : MonoBehaviour
             inspectionButtons[index].interactable = false;
             Debug.Log($"Button {index} pressed!");
 
-            EnergyControl.health -= 1;
+            EnergyControl.energy -= 1;
         //    energy1.SetActive( false ); //make energy 1 disappear
         }
     }

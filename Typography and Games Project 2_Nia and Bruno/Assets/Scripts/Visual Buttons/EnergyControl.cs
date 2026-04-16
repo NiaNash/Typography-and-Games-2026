@@ -6,12 +6,12 @@ public class EnergyControl : MonoBehaviour
 {
 
     public GameObject Energy1, Energy2, Energy3, Energy4, Energy5;
-    public static int health;
+    public static int energy;
 
     // Start is called before the first frame update
     void Start()
     {
-        health = 5;
+        energy = 5;
         Energy1.gameObject.SetActive(true);
         Energy2.gameObject.SetActive(true);
         Energy3.gameObject.SetActive(true);
@@ -23,7 +23,7 @@ public class EnergyControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (health)
+        switch (energy)
         {
             case 5:
                 Energy1.gameObject.SetActive(true);
