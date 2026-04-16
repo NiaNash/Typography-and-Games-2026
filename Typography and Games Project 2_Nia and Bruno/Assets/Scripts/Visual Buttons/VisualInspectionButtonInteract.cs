@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class VisualInspectionButtonInteract : MonoBehaviour
 {
-
+   // public EnergyControl energyControl;
     public Button[] inspectionButtons;
     private bool[] hasBeenPressed;
 
-    [SerializeField] private GameObject energy1; //ref energy
+   // [SerializeField] private GameObject energy1; //ref energy
 
     void Start()
     {
@@ -29,7 +29,8 @@ public class VisualInspectionButtonInteract : MonoBehaviour
             inspectionButtons[index].interactable = false;
             Debug.Log($"Button {index} pressed!");
 
-            energy1.SetActive( false ); //make energy 1 disappear
+            EnergyControl.health -= 1;
+        //    energy1.SetActive( false ); //make energy 1 disappear
         }
     }
 }
