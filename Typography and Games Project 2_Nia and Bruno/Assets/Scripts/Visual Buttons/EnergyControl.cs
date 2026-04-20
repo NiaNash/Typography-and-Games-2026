@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnergyControl : MonoBehaviour
 {
@@ -8,7 +9,16 @@ public class EnergyControl : MonoBehaviour
     public GameObject Energy1, Energy2, Energy3;
     public static int energy;
 
-    // Start is called before the first frame update
+    public Button[] inspectionButtons;
+
+    void SetButtonsInteractable(bool state)
+    {
+        foreach (Button btn in inspectionButtons)
+        {
+            btn.interactable = state;
+        }
+    }
+
     void Start()
     {
         energy = 3;
@@ -39,11 +49,24 @@ public class EnergyControl : MonoBehaviour
                 Energy3.gameObject.SetActive(false);
                 break;
             default:
-                Energy1.gameObject.SetActive(false);
-                Energy2.gameObject.SetActive(false);
-                Energy3.gameObject.SetActive(false);
-                break;
+                {
+                    Energy1.gameObject.SetActive(false);
+                    Energy2.gameObject.SetActive(false);
+                    Energy3.gameObject.SetActive(false);
+                  
+
+                    SetButtonsInteractable(false);
+                    break;
+                }
 
         }
     }
+
+  /*  void SetButtonsInteractable(bool state)
+    {
+        foreach (Button btn in inspectionButtons)
+        {
+            btn.interactable = state;
+        }
+    }*/
 }

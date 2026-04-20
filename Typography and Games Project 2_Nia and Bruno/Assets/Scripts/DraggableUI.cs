@@ -5,15 +5,28 @@ using UnityEngine.EventSystems;
 
 public class DraggableUI : MonoBehaviour
 {
-    private RectTransform rectTransform;
+    private Vector3 offset;
+    private Camera cam;
 
-    private void Awake()
+    void Start()
     {
-        rectTransform = GetComponent<RectTransform>();
+        cam = Camera.main;
     }
 
-    public void OnDrag(PointerEventData eventData)
+    void OnMouseDown()
     {
-        rectTransform.anchoredPosition += eventData.delta;
+        offset = transform.position - GetMouseWorldPos();
+    }
+
+    void OnMouseDrag()
+    {
+        transform.position = GetMouseWorldPos() + offset;
+    }
+
+    Vector3 GetMouseWorldPos()
+    {
+        Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = transform.position.z;
+        return mousePos;
     }
 }
