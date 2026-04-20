@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ticket
   - DropZone
+  - Human
+  - Monster
   layers:
   - Default
   - TransparentFX

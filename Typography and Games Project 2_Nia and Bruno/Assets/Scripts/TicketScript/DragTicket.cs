@@ -8,14 +8,17 @@ public class DragTicket : MonoBehaviour
     private Camera cam;
 
     private bool isInDropZone = false;
-    private Sprite newSprite;
+    //private Sprite newSprite;
+    private TicketDropZone currentZone;
 
     private SpriteRenderer sr;
+    private TicketType ticketType;
 
     void Start()
     {
         cam = Camera.main;
         sr = GetComponent<SpriteRenderer>();
+        ticketType = GetComponent<TicketType>();
     }
 
     void OnMouseDown()
@@ -30,10 +33,21 @@ public class DragTicket : MonoBehaviour
 
     void OnMouseUp()
     {
-        // ✅ ONLY change when released inside zone
-        if (isInDropZone && newSprite != null)
+        if (isInDropZone && currentZone != null)
         {
-            sr.sprite = newSprite;
+            // Change sprite
+            if (currentZone.newTicketSprite != null)
+            {
+                sr.sprite = currentZone.newTicketSprite;
+            }
+
+            // ✅ Update ticket type (THIS FIXES YOUR ISSUE)
+            if (ticketType != null)
+            {
+                ticketType.ticketKind = currentZone.zoneTicketType;
+            }
+
+            Debug.Log("Ticket updated to: " + ticketType.ticketKind);
         }
     }
 
@@ -45,28 +59,30 @@ public class DragTicket : MonoBehaviour
     }
 
     // 👇 Detect entering zone
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("DropZone"))
         {
             isInDropZone = true;
+            currentZone = other.GetComponent<TicketDropZone>();
+        }
 
-            // get sprite from zone
+          /*  // get sprite from zone
             TicketDropZone zone = other.GetComponent<TicketDropZone>();
             if (zone != null)
             {
                 newSprite = zone.newTicketSprite;
-            }
-        }
+            }*/
+        
     }
 
     // 👇 Detect leaving zone
-    private void OnTriggerExit2D(Collider2D other)
+    void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("DropZone"))
         {
             isInDropZone = false;
-            newSprite = null;
+            currentZone = null;
         }
     }
 }

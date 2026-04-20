@@ -23,4 +23,6 @@ using UnityEngine;
 public class TicketDropZone : MonoBehaviour
 {
     public Sprite newTicketSprite;
+    public TicketType.TicketKind zoneTicketType;
+
 }
