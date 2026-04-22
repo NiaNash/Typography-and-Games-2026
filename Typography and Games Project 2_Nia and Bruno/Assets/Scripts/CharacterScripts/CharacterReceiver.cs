@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class CharacterReceiver : MonoBehaviour
 {
+    // Assigned by GameManager each round
+    public CharacterType characterType;
+
+    private bool hasEvaluated = false;
+
     private void OnTriggerStay2D(Collider2D other)
     {
-        // Check if player released mouse
+        if (hasEvaluated) return;
+
+        // Only evaluate when player releases mouse
         if (Input.GetMouseButtonUp(0))
         {
             TicketType ticket = other.GetComponent<TicketType>();
@@ -15,9 +22,15 @@ public class CharacterReceiver : MonoBehaviour
             {
                 Evaluate(ticket);
 
+                // Prevent multiple evaluations in same frame
+                hasEvaluated = true;
+
+                // Only destroy + reset if ticket was actually used
                 if (ticket.ticketKind != TicketType.TicketKind.Neutral)
-                { 
-                    other.gameObject.SetActive(false);
+                {
+                    Destroy(other.gameObject);
+
+                    FindObjectOfType<GameManager>().ResetRound();
                 }
             }
         }
@@ -25,12 +38,9 @@ public class CharacterReceiver : MonoBehaviour
 
     void Evaluate(TicketType ticket)
     {
-        bool isHuman = CompareTag("Human");
-        bool isMonster = CompareTag("Monster");
-
         bool correct =
-            (isHuman && ticket.ticketKind == TicketType.TicketKind.Good) ||
-            (isMonster && ticket.ticketKind == TicketType.TicketKind.Bad);
+            (characterType == CharacterType.Human && ticket.ticketKind == TicketType.TicketKind.Good) ||
+            (characterType == CharacterType.Monster && ticket.ticketKind == TicketType.TicketKind.Bad);
 
         if (correct)
         {
@@ -44,32 +54,12 @@ public class CharacterReceiver : MonoBehaviour
 
             if (HeartsControl.health < 0)
                 HeartsControl.health = 0;
-
-            /* if (CompareTag("Human"))
-             {
-                 if (ticket.ticketKind == TicketType.TicketKind.Good)
-                 {
-                     Debug.Log("✅ Correct ticket for HUMAN");
-                 }
-                 else
-                 {
-                     Debug.Log("❌ WRONG ticket for HUMAN");
-                     // subtract health later
-                 }
-             }
-             else if (CompareTag("Monster"))
-             {
-                 if (ticket.ticketKind == TicketType.TicketKind.Bad)
-                 {
-                     Debug.Log("✅ Correct ticket for MONSTER");
-                 }
-                 else
-                 {
-                     Debug.Log("❌ WRONG ticket for MONSTER");
-                     // subtract health later
-                 }
-
-             }*/
         }
+    }
+
+    // Reset this when a new character/round starts
+    public void ResetState()
+    {
+        hasEvaluated = false;
     }
 }

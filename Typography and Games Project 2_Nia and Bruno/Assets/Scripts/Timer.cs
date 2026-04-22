@@ -7,7 +7,7 @@ public class Timer : MonoBehaviour
 {
 
     [SerializeField] private TextMeshProUGUI _text;
-    [SerializeField] private float _startTime = 10f; //round length
+    [SerializeField] private float _startTime = 30f; //round length
     [SerializeField] private int _decimals;
 
     private float _timeRemaining;
@@ -52,6 +52,7 @@ public class Timer : MonoBehaviour
         if (HeartsControl.health < 0)
             HeartsControl.health = 0;
 
+        FindObjectOfType<GameManager>().ResetRound();
         ResetTimer(); //used for rounds
     }
 

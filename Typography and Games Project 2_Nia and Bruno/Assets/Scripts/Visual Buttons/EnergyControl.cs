@@ -60,13 +60,18 @@ public class EnergyControl : MonoBehaviour
                 }
 
         }
-    }
 
-  /*  void SetButtonsInteractable(bool state)
-    {
-        foreach (Button btn in inspectionButtons)
+        
+    }
+public void ResetEnergy()
         {
-            btn.interactable = state;
+            energy = 3;
+
+            Energy1.gameObject.SetActive(true);
+            Energy2.gameObject.SetActive(true);
+            Energy3.gameObject.SetActive(true);
+
+            SetButtonsInteractable(true);
         }
-    }*/
+
 }

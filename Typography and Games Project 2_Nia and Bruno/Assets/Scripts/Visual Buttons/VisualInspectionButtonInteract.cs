@@ -33,4 +33,14 @@ public class VisualInspectionButtonInteract : MonoBehaviour
         //    energy1.SetActive( false ); //make energy 1 disappear
         }
     }
+
+    public void ResetInspectionButtons()
+    {
+        hasBeenPressed = new bool[inspectionButtons.Length];
+
+        for (int i = 0; i < inspectionButtons.Length; i++)
+        {
+            inspectionButtons [i].interactable = true;
+        }
+    }
 }
