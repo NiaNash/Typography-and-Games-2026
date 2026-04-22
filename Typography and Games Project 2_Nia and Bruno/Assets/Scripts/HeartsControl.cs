@@ -22,6 +22,11 @@ public class HeartsControl : MonoBehaviour
     {
         switch (health)
         {
+            case 3:
+                Heart1.gameObject.SetActive(true);
+                Heart2.gameObject.SetActive(true);
+                Heart3.gameObject.SetActive(true);
+                break;
             case 2:
                 Heart1.gameObject.SetActive(true);
                 Heart2.gameObject.SetActive(true);
