@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,9 +15,15 @@ public class GameManager : MonoBehaviour
     public GameObject idPrefab;
     public GameObject characterPrefab;
 
-    [Header("Sprites")]
-    public List<Sprite> idSprites = new List<Sprite>();
+    [Header("Sprites - Characters")]
     public List<Sprite> characterSprites = new List<Sprite>();
+    public List<Sprite> idSprites = new List<Sprite>();
+
+    [Header("Inspection Sprites (Per Round)")]
+    public List<Sprite> earsSprites = new List<Sprite>();
+    public List<Sprite> eyesSprites = new List<Sprite>();
+    public List<Sprite> mouthSprites = new List<Sprite>();
+    public List<Sprite> handsSprites = new List<Sprite>();
 
     [Header("Spawn Points")]
     public Transform ticketSpawnPoint;
@@ -31,6 +38,12 @@ public class GameManager : MonoBehaviour
     private GameObject currentTicket;
     private GameObject currentID;
     private GameObject currentCharacter;
+
+    [Header("Inspection Popups")]
+    public Image earsPopup;
+    public Image eyesPopup;
+    public Image teethPopup;
+    public Image handsPopup;
 
     void Start()
     {
@@ -77,6 +90,8 @@ public class GameManager : MonoBehaviour
         StartRound();
     }
 
+    public int CurrentRoundIndex => currentRoundIndex;
+
     // -------------------------
     // CHARACTER SYSTEM
     // -------------------------
@@ -107,13 +122,10 @@ public class GameManager : MonoBehaviour
 
     void SpawnDocuments()
     {
-        // Spawn Ticket
         currentTicket = Instantiate(ticketPrefab, ticketSpawnPoint.position, Quaternion.identity);
 
-        // Spawn ID
         currentID = Instantiate(idPrefab, idSpawnPoint.position, Quaternion.identity);
 
-        // Apply ID sprite
         SpriteRenderer idSR = currentID.GetComponent<SpriteRenderer>();
 
         if (idSR != null && idSprites.Count > 0)
@@ -121,5 +133,41 @@ public class GameManager : MonoBehaviour
             int index = currentRoundIndex % idSprites.Count;
             idSR.sprite = idSprites[index];
         }
+    }
+
+    // -------------------------
+    // INSPECTION SYSTEM (CALLED BY BUTTONS)
+    // -------------------------
+
+    public void ShowEars()
+    {
+        if (earsPopup == null || earsSprites.Count == 0) return;
+
+        earsPopup.gameObject.SetActive(true);
+        earsPopup.sprite = earsSprites[currentRoundIndex];
+    }
+
+    public void ShowEyes()
+    {
+        if (eyesPopup == null || eyesSprites.Count == 0) return;
+
+        eyesPopup.gameObject.SetActive(true);
+        eyesPopup.sprite = eyesSprites[currentRoundIndex];
+    }
+
+    public void ShowTeeth()
+    {
+        if (teethPopup == null || mouthSprites.Count == 0) return;
+
+        teethPopup.gameObject.SetActive(true);
+       teethPopup.sprite = mouthSprites[currentRoundIndex];
+    }
+
+    public void ShowHands()
+    {
+        if (handsPopup == null || handsSprites.Count == 0) return;
+
+        handsPopup.gameObject.SetActive(true);
+        handsPopup.sprite = handsSprites[currentRoundIndex];
     }
 }

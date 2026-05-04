@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class ShowEars : MonoBehaviour
 {
-    [SerializeField] private GameObject spriteToShow;
+    private GameManager gm;
 
-    //   [SerializeField] private GameObject buttonToHide;
-
+    void Awake()
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
 
     public void ShowTheEars()
     {
-        spriteToShow.SetActive(true); //show ears sprite
-
-        // buttonToHide.SetActive(false); //hide all visual inspect options
+        if (gm != null)
+        {
+            gm.ShowEars();
+        }
     }
 }

@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class ShowEyes : MonoBehaviour
 {
-    [SerializeField] private GameObject spriteToShow;
-  
-  //  [SerializeField] private GameObject buttonToHide;
+    private GameManager gm;
 
+    void Awake()
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
 
     public void ShowTheEyes()
     {
-        spriteToShow.SetActive(true); //show eyes sprite
-
-      //  buttonToHide.SetActive(false); //hide all visual inspect options
+        if (gm != null)
+        {
+            gm.ShowEyes();
+        }
     }
 }

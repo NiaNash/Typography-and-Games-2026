@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class ShowHands : MonoBehaviour
 {
-    [SerializeField] private GameObject spriteToShow;
-  
-  //  [SerializeField] private GameObject buttonToHide;
+    private GameManager gm;
 
+    void Awake()
+    {
+        gm = FindObjectOfType<GameManager>();
+    }
 
     public void ShowTheHands()
     {
-        spriteToShow.SetActive(true); //show eyes sprite
-
-      //  buttonToHide.SetActive(false); //hide all visual inspect options
+        if (gm != null)
+        {
+            gm.ShowHands();
+        }
     }
 }
