@@ -1,46 +1,39 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterReceiver : MonoBehaviour
 {
-    // Assigned by GameManager each round
     public CharacterType characterType;
 
-    private bool hasEvaluated = false;
+    private bool hasResolved = false;
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (hasEvaluated) return;
+        if (hasResolved) return;
 
-        // Only evaluate when player releases mouse
         if (Input.GetMouseButtonUp(0))
         {
-            TicketType ticket = other.GetComponent<TicketType>();
+            // 🔥 FIX: get TicketType even if collider is on child
+            TicketType ticket = other.GetComponentInParent<TicketType>();
 
             if (ticket != null)
             {
-                Evaluate(ticket);
-
-                // Prevent multiple evaluations in same frame
-                hasEvaluated = true;
-
-                // Only destroy + reset if ticket was actually used
-                if (ticket.ticketKind != TicketType.TicketKind.Neutral)
-                {
-                    Destroy(other.gameObject);
-
-                    FindObjectOfType<GameManager>().ResetRound();
-                }
+                hasResolved = true;
+                StartCoroutine(EvaluateAndResolve(ticket, other.gameObject));
             }
         }
     }
 
-    void Evaluate(TicketType ticket)
+    IEnumerator EvaluateAndResolve(TicketType ticket, GameObject ticketObj)
     {
+        Debug.Log("Processing ticket...");
+
+        bool isHuman = characterType == CharacterType.Human;
+        bool isMonster = characterType == CharacterType.Monster;
+
         bool correct =
-            (characterType == CharacterType.Human && ticket.ticketKind == TicketType.TicketKind.Good) ||
-            (characterType == CharacterType.Monster && ticket.ticketKind == TicketType.TicketKind.Bad);
+            (isHuman && ticket.ticketKind == TicketType.TicketKind.Good) ||
+            (isMonster && ticket.ticketKind == TicketType.TicketKind.Bad);
 
         if (correct)
         {
@@ -55,11 +48,25 @@ public class CharacterReceiver : MonoBehaviour
             if (HeartsControl.health < 0)
                 HeartsControl.health = 0;
         }
-    }
 
-    // Reset this when a new character/round starts
-    public void ResetState()
-    {
-        hasEvaluated = false;
+        // ✅ ONLY destroy + reset if NOT Neutral
+        if (ticket.ticketKind != TicketType.TicketKind.Neutral)
+        {
+            Debug.Log("Destroying ticket and resetting round");
+
+            // 🔥 Destroy the full ticket (root object)
+            Destroy(ticketObj.transform.root.gameObject);
+
+            yield return new WaitForSeconds(1f);
+
+            FindObjectOfType<GameManager>().ResetRound();
+        }
+        else
+        {
+            Debug.Log("Neutral ticket → do nothing");
+        }
+
+        // allow interaction again next time
+        hasResolved = false;
     }
 }
