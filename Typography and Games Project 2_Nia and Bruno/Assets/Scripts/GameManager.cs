@@ -14,19 +14,23 @@ public class GameManager : MonoBehaviour
     public GameObject idPrefab;
     public GameObject characterPrefab;
 
+    [Header("Sprites")]
+    public List<Sprite> idSprites = new List<Sprite>();
+    public List<Sprite> characterSprites = new List<Sprite>();
+
     [Header("Spawn Points")]
     public Transform ticketSpawnPoint;
     public Transform idSpawnPoint;
     public Transform characterSpawnPoint;
 
-    [Header("Round Setup (Inspector)")]
+    [Header("Round Setup")]
     public List<CharacterType> roundCharacterTypes = new List<CharacterType>();
 
     private int currentRoundIndex = 0;
 
     private GameObject currentTicket;
     private GameObject currentID;
-    public GameObject currentCharacter;
+    private GameObject currentCharacter;
 
     void Start()
     {
@@ -41,26 +45,21 @@ public class GameManager : MonoBehaviour
     {
         SpawnCharacter();
         SpawnDocuments();
-        ApplyCharacterType();
     }
 
     public void ResetRound()
     {
         Debug.Log("Resetting Round...");
 
-        // Timer reset
         if (timer != null)
             timer.ResetTimer();
 
-        // Energy reset
         if (energyControl != null)
             energyControl.ResetEnergy();
 
-        // Button reset
         if (inspectionUI != null)
             inspectionUI.ResetInspectionButtons();
 
-        // Destroy old objects
         if (currentTicket != null)
             Destroy(currentTicket);
 
@@ -70,15 +69,11 @@ public class GameManager : MonoBehaviour
         if (currentCharacter != null)
             Destroy(currentCharacter);
 
-        // Move to next round
         currentRoundIndex++;
 
         if (currentRoundIndex >= roundCharacterTypes.Count)
-        {
-            currentRoundIndex = 0; // loop back (or replace with end game later)
-        }
+            currentRoundIndex = 0;
 
-        // Start next round
         StartRound();
     }
 
@@ -89,11 +84,14 @@ public class GameManager : MonoBehaviour
     void SpawnCharacter()
     {
         currentCharacter = Instantiate(characterPrefab, characterSpawnPoint.position, Quaternion.identity);
-    }
 
-    void ApplyCharacterType()
-    {
-        if (currentCharacter == null) return;
+        SpriteRenderer sr = currentCharacter.GetComponent<SpriteRenderer>();
+
+        if (sr != null && characterSprites.Count > 0)
+        {
+            int index = currentRoundIndex % characterSprites.Count;
+            sr.sprite = characterSprites[index];
+        }
 
         CharacterReceiver receiver = currentCharacter.GetComponent<CharacterReceiver>();
 
@@ -109,7 +107,19 @@ public class GameManager : MonoBehaviour
 
     void SpawnDocuments()
     {
+        // Spawn Ticket
         currentTicket = Instantiate(ticketPrefab, ticketSpawnPoint.position, Quaternion.identity);
+
+        // Spawn ID
         currentID = Instantiate(idPrefab, idSpawnPoint.position, Quaternion.identity);
+
+        // Apply ID sprite
+        SpriteRenderer idSR = currentID.GetComponent<SpriteRenderer>();
+
+        if (idSR != null && idSprites.Count > 0)
+        {
+            int index = currentRoundIndex % idSprites.Count;
+            idSR.sprite = idSprites[index];
+        }
     }
 }

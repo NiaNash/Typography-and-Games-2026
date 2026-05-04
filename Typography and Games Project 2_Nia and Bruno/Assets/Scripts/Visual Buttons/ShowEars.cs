@@ -5,14 +5,14 @@ using UnityEngine;
 public class ShowEars : MonoBehaviour
 {
     [SerializeField] private GameObject spriteToShow;
-  
- //   [SerializeField] private GameObject buttonToHide;
+
+    //   [SerializeField] private GameObject buttonToHide;
 
 
     public void ShowTheEars()
     {
-        spriteToShow.SetActive(true); //show eyes sprite
+        spriteToShow.SetActive(true); //show ears sprite
 
-      //  buttonToHide.SetActive(false); //hide all visual inspect options
+        // buttonToHide.SetActive(false); //hide all visual inspect options
     }
 }
