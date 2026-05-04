@@ -1,7 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -45,6 +46,13 @@ public class GameManager : MonoBehaviour
     public Image teethPopup;
     public Image handsPopup;
 
+    [Header("End Cards")]
+    public GameObject winCard;
+    public GameObject loseCard;
+
+    // 🔥 ADDED: game state lock
+    private bool gameEnded = false;
+
     void Start()
     {
         StartRound();
@@ -56,12 +64,16 @@ public class GameManager : MonoBehaviour
 
     void StartRound()
     {
+        if (gameEnded) return;
+
         SpawnCharacter();
         SpawnDocuments();
     }
 
     public void ResetRound()
     {
+        if (gameEnded) return;
+
         Debug.Log("Resetting Round...");
 
         if (timer != null)
@@ -85,7 +97,10 @@ public class GameManager : MonoBehaviour
         currentRoundIndex++;
 
         if (currentRoundIndex >= roundCharacterTypes.Count)
-            currentRoundIndex = 0;
+        {
+            EndGame();
+            return;
+        }
 
         StartRound();
     }
@@ -136,7 +151,7 @@ public class GameManager : MonoBehaviour
     }
 
     // -------------------------
-    // INSPECTION SYSTEM (CALLED BY BUTTONS)
+    // INSPECTION SYSTEM
     // -------------------------
 
     public void ShowEars()
@@ -160,7 +175,7 @@ public class GameManager : MonoBehaviour
         if (teethPopup == null || mouthSprites.Count == 0) return;
 
         teethPopup.gameObject.SetActive(true);
-       teethPopup.sprite = mouthSprites[currentRoundIndex];
+        teethPopup.sprite = mouthSprites[currentRoundIndex];
     }
 
     public void ShowHands()
@@ -169,5 +184,44 @@ public class GameManager : MonoBehaviour
 
         handsPopup.gameObject.SetActive(true);
         handsPopup.sprite = handsSprites[currentRoundIndex];
+    }
+
+    // -------------------------
+    // END GAME SYSTEM (ADDED)
+    // -------------------------
+
+    void EndGame()
+    {
+        gameEnded = true;
+
+        Debug.Log("Game Ended");
+
+        if (timer != null)
+            timer.enabled = false;
+
+        if (energyControl != null)
+            energyControl.enabled = false;
+
+        if (inspectionUI != null)
+            inspectionUI.gameObject.SetActive(false);
+
+        if (currentCharacter != null)
+            Destroy(currentCharacter);
+
+        if (currentTicket != null)
+            Destroy(currentTicket);
+
+        if (currentID != null)
+            Destroy(currentID);
+
+        // 🎯 SCENE SWITCH
+        if (HeartsControl.health == 3)
+        {
+            SceneManager.LoadScene("Win");
+        }
+        else
+        {
+            SceneManager.LoadScene("Lose");
+        }
     }
 }
